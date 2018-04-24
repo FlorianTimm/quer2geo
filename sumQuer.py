@@ -57,7 +57,7 @@ except sqlite3.OperationalError:
 
 # Mittelstreifen berechnen
 print("Mitte")
-daten.execute('UPDATE DB001030 SET ABSTAND_VST1 = ROUND(- BREITE / 2), ABSTAND_VST2 = ROUND(BREITE / 2), ' +
+daten.execute('UPDATE DB001030 SET ABSTAND_VST1 = ROUND(- BREITE / 2), ABSTAND_VST2 = ROUND(BREITE / 2), ' + 
               'ABSTAND_BST1 = ROUND(- BISBREITE / 2), ABSTAND_BST2 = ROUND(BISBREITE / 2) WHERE STREIFEN = "M"')
 
 print("Links")
