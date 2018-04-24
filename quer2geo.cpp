@@ -2,8 +2,8 @@
 // Name        : quer2geo.cpp
 // Author      : Florian Timm
 // Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Copyright   : MIT Licence
+// Description : Querschnitte aus der TTSIB zu Geometrien
 //============================================================================
 
 #include <stdio.h>
@@ -31,7 +31,7 @@ double strecke(double x1, double x2, double y1, double y2) {
 	return strecke(x2 - x1, y2 - y1);
 }
 
-void preparePoints () {
+void preparePoints() {
 	sqlite3_stmt * stmt_update255;
 	string sql_update255 =
 			"UPDATE DB000255 SET DX = ?, DY = ? WHERE VNK = ? AND NNK = ? AND SORT = ?;";
@@ -133,7 +133,7 @@ void preparePoints () {
 				einheit(&dx_alt, s);
 				einheit(&dy_alt, s);
 
-				// dx und dy beim vorherigen Punkt setzen (au�er ersten)
+				// dx und dy beim vorherigen Punkt setzen (außer ersten)
 				sqlite3_bind_double(stmt_update255, 1, dx_alt);
 				sqlite3_bind_double(stmt_update255, 2, dy_alt);
 				sqlite3_bind_text(stmt_update255, 3, vnk, 10, 0);
@@ -176,7 +176,7 @@ void preparePoints () {
 		sqlite3_step(stmt_update255a);
 		sqlite3_reset(stmt_update255a);
 
-		// zu gro�e Stationen entfernen
+		// zu große Stationen entfernen
 		sqlite3_bind_double(stmt_zugross, 1, faktor);
 		sqlite3_bind_text(stmt_zugross, 2, vnk, 10, 0);
 		sqlite3_bind_text(stmt_zugross, 3, nnk, 10, 0);
@@ -215,7 +215,7 @@ void updateQuerschnitte(char* seite) {
 	int rc;
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 
-		if (vnk.compare((char *)sqlite3_column_text(stmt, 4)) != 0
+		if (vnk.compare((char *) sqlite3_column_text(stmt, 4)) != 0
 				or nnk.compare((char*) sqlite3_column_text(stmt, 5)) != 0
 				or vst != sqlite3_column_int(stmt, 0)
 				or streifennr > sqlite3_column_int(stmt, 1)) {
@@ -252,14 +252,12 @@ void updateQuerschnitte(char* seite) {
 		}
 		streifennr = sqlite3_column_int(stmt, 1);
 
-
 	}
 	sqlite3_reset(stmt);
 
 }
 
 void sumQuer() {
-
 
 	fprintf(stdout, "Felder anlegen\n");
 	sqlite3_exec(db,
@@ -288,14 +286,27 @@ void sumQuer() {
 	fprintf(stdout, "Fertig!\n");
 }
 
-
-int main(int argc,  char** argv) {
+int main(int argc, char** argv) {
 	fprintf(stdout, "Hallo\n");
 	sqlite3_open("D:\\Querschnitt2Geo\\daten.db", &db);
-	sqlite3_exec(db, "PRAGMA schema.synchronous = 0",0,0,0);
+	sqlite3_exec(db, "PRAGMA schema.synchronous = 0", 0, 0, 0);
 
-	sumQuer();
-	//preparePoints();
+	int auswahl;
+	cout << "Prozess auswählen:" << endl;
+	cout << "1: preparePoints" << endl;
+	cout << "2: sumQuer" << endl;
+	cin >> auswahl;
+
+	switch (auswahl) {
+	case 1:
+		cout << "preparePoints gewählt:" << endl;
+		preparePoints();
+		break;
+	case 2:
+		cout << "sumQuer gewählt:" << endl;
+		sumQuer();
+		break;
+	}
 
 	sqlite3_close(db);
 
