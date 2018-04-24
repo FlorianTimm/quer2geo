@@ -109,7 +109,7 @@ for row in abschn:
                 a = quer[4]+f*(quer[6]-quer[4])
                 # print(a)
 
-                # Abstand2 interpolieren
+                # Abstand 2 interpolieren
                 b = quer[5]+f*(quer[7]-quer[5])
                 # print(b)
                 try:
